@@ -1,0 +1,18 @@
+#titleFieldContainer
+{
+	padding: 8px;
+}
+
+#titleField
+{
+	width: 100%;
+}
+
+#pasteFieldContainer
+{
+	position: absolute;
+	top: 92px;
+	bottom: 50px;
+	left: 0px;
+	right: 0px;
+}

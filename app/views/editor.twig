@@ -1,0 +1,36 @@
+{% extends "default.twig" %}
+{% block title %}vBin | {{ title }}{% if title is empty %}Editor{% endif %}{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/codemirror.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/editor.css') }}">
+{% endblock %}
+{% block navigation %}
+<!-- Navigation -->
+
+<ul class="nav navbar-nav">
+	<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">File <span class="caret"></span></a>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="#">New...</a></li>
+			<li class="divider"></li>
+			<li><a href="#">Save</a></li>
+			<!-- More? -->
+		</ul>
+	</li>
+</ul>
+
+{% endblock %}
+{% block content %}
+<form id="editorForm" method="post" action="{{ urlFor('save') }}" data-previous="{{ previous_id }}" data-post-action="{{ urlFor('save') }}">
+	<input type="hidden" name="previous_id" value="{{ previous_id }}" />
+	<div id="titleFieldContainer">
+		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ previous_title }}">
+	</div>
+	<div id="pasteFieldContainer">
+		<textarea id="pasteField" name="paste" rows="15">{{ previous_paste }}</textarea>
+	</div>
+</form>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="{{ siteUrl('/assets/js/vendor/codemirror.js') }}"></script>
+<script type="text/javascript" src="{{ siteUrl('/assets/js/editor.js') }}"></script>
+{% endblock %}

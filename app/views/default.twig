@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>{% block title %}vBin - Versioned Bin{% endblock %}</title>
+<link rel="icon" type="image/png" href="{{ siteUrl('/assets/img/icon_32x32.png') }}'" />
+<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/bootstrap.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/font-awesome.css') }}" />
+
+{% block stylesheets %}{% endblock %}
+
+<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/common.css') }}" />
+</head>
+<body>
+	<nav id="site_navigation" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header pull-right">
+				
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">vBin</a>
+			</div>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+{% block navigation %}{% endblock %}
+			</div>
+		</div>
+	</nav>
+	
+{% block content %}{% endblock %}
+	
+	<footer>
+		<p>&copy; {{ "now"|date('Y') }} <a href="mailto:matt@schneenet.com">Matt Schneeberger</a> / SCHNEENET</p>
+	</footer>
+
+	<script src="{{ siteUrl('/assets/js/vendor/jquery-1.11.1.js') }}"></script>
+	<script src="{{ siteUrl('/assets/js/vendor/bootstrap.js') }}"></script>
+	
+{% block javascripts %}{% endblock %}
+
+	<script src="{{ siteUrl('/assets/js/app.js') }}"></script>
+</body>
+</html>
