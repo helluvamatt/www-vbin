@@ -2,20 +2,17 @@
 {% block title %}vBin | {{ title }}{% if title is empty %}Editor{% endif %}{% endblock %}
 {% block stylesheets %}
 <link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/codemirror.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/twilight.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/editor.css') }}">
 {% endblock %}
 {% block navigation %}
 <!-- Navigation -->
 
 <ul class="nav navbar-nav">
-	<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">File <span class="caret"></span></a>
-		<ul class="dropdown-menu" role="menu">
-			<li><a href="#">New...</a></li>
-			<li class="divider"></li>
-			<li><a href="#">Save</a></li>
-			<!-- More? -->
-		</ul>
-	</li>
+	<li><a href="{{ siteUrl('/') }}" class="tb-action" data-action="new"><i class="fa fa-fw fa-file-o"></i>New</a></li>
+	<li><a href="#" class="tb-action" data-action="new"><i class="fa fa-fw fa-floppy-o"></i>Save</a></li>
+	<li><a href="#" class="tb-action" data-action="editor_mode"><i class="fa fa-fw fa-file-code-o"></i>Editor Mode</a></li>
+	<!-- li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a></li -->
 </ul>
 
 {% endblock %}

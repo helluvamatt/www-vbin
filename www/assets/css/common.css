@@ -17,6 +17,14 @@ html, body {
 	font-family: "Consolas", "Courier New", monospace;
 }
 
+@media (min-width: 768px)
+{
+	body { padding-top: 30px; }
+	.navbar-nav > li > a {padding-top:5px; padding-bottom:5px;}
+	.navbar {min-height:30px;}
+	.navbar-brand {height: 30px; padding: 5px;}
+}
+
 .center
 {
 	text-align: center;
