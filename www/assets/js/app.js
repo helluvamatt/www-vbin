@@ -6,5 +6,8 @@ $(document).ready(function()
 		e.stopPropagation();
 	});
 	
-	$('.btn-with-tooltip').tooltip();	
+	$('.with-tooltip').tooltip({
+		placement: 'auto top',
+		container: 'body'
+	});	
 });

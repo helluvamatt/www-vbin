@@ -21,8 +21,12 @@ html, body {
 {
 	body { padding-top: 30px; }
 	.navbar-nav > li > a {padding-top:5px; padding-bottom:5px;}
-	.navbar {min-height:30px;}
+	.navbar {min-height:29px;}
 	.navbar-brand {height: 30px; padding: 5px;}
+	.navbar-form {margin-bottom: 4px; margin-top: 4px;}
+	.navbar-form .form-group label {margin: 1px 4px;}
+	.navbar-form .form-control {padding: 1px 6px; height: 22px;}
+	.navbar-text {margin-bottom: 5px; margin-top: 5px;}
 }
 
 .center

@@ -1,8 +1,6 @@
 {% extends "default.twig" %}
 {% block title %}vBin | {{ title }}{% if title is empty %}Editor{% endif %}{% endblock %}
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/codemirror.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/twilight.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ siteUrl('/assets/css/editor.css') }}">
 {% endblock %}
 {% block navigation %}
@@ -11,14 +9,22 @@
 <ul class="nav navbar-nav">
 	<li><a href="{{ siteUrl('/') }}" class="tb-action" data-action="new"><i class="fa fa-fw fa-file-o"></i>New</a></li>
 	<li><a href="#" class="tb-action" data-action="new"><i class="fa fa-fw fa-floppy-o"></i>Save</a></li>
-	<li><a href="#" class="tb-action" data-action="editor_mode"><i class="fa fa-fw fa-file-code-o"></i>Editor Mode</a></li>
+	<!-- li><a href="#" class="tb-action" data-action="editor_mode"><i class="fa fa-fw fa-file-code-o"></i>Editor Mode</a></li -->
 	<!-- li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a></li -->
 </ul>
+
+<div class="navbar-form navbar-left">
+	<div class="form-group with-tooltip" title="Language Highlight Mode">
+		<label for="languageMenu" class="navbar-text"><i class="fa fa-fw fa-file-code-o"></i></label>
+		<select class="form-control" name="lang" id="languageMenu"></select>
+	</div>
+</div>
 
 {% endblock %}
 {% block content %}
 <form id="editorForm" method="post" action="{{ urlFor('save') }}" data-previous="{{ previous_id }}" data-post-action="{{ urlFor('save') }}">
 	<input type="hidden" name="previous_id" value="{{ previous_id }}" />
+	<input type="hidden" name="lang" id="languageField" value="{{ previous_lang }}" />
 	<div id="titleFieldContainer">
 		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ previous_title }}">
 	</div>
@@ -27,8 +33,12 @@
 		<div id="pasteFieldEditor"></div>
 	</div>
 </form>
+
+<div 
 {% endblock %}
 {% block javascripts %}
 <script type="text/javascript" src="{{ siteUrl('/assets/vendor/ace/src-noconflict/ace.js') }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ siteUrl('/assets/vendor/ace/src-noconflict/ext-modelist.js') }}" charset="utf-8"></script>
+<script type="text/javascript" src="{{ siteUrl('/assets/vendor/ace/src-noconflict/ext-themelist.js') }}" charset="utf-8"></script>
 <script type="text/javascript" src="{{ siteUrl('/assets/js/editor.js') }}"></script>
 {% endblock %}
