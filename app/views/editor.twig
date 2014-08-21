@@ -23,11 +23,12 @@
 		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ previous_title }}">
 	</div>
 	<div id="pasteFieldContainer">
-		<textarea id="pasteField" name="paste" rows="15">{{ previous_paste }}</textarea>
+		<textarea id="pasteField" name="paste">{{ previous_paste }}</textarea>
+		<div id="pasteFieldEditor"></div>
 	</div>
 </form>
 {% endblock %}
 {% block javascripts %}
-<script type="text/javascript" src="{{ siteUrl('/assets/js/vendor/codemirror.js') }}"></script>
+<script type="text/javascript" src="{{ siteUrl('/assets/vendor/ace/src-noconflict/ace.js') }}" charset="utf-8"></script>
 <script type="text/javascript" src="{{ siteUrl('/assets/js/editor.js') }}"></script>
 {% endblock %}
