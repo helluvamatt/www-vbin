@@ -1,4 +1,5 @@
 ﻿DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS pastes;
 
 -- CodeIgniter Session table
 CREATE TABLE sessions (
@@ -33,3 +34,13 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE TABLE pastes (
+	id BIGSERIAL PRIMARY KEY,
+	name CHARACTER VARYING(255) DEFAULT null,
+	lang CHARACTER VARYING(255) NOT null,
+	data BIGTEXT,
+	previous_id BIGINT DEFAULT null,
+	created_at TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP,
+);

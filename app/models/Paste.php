@@ -1,7 +1,7 @@
 <?php
 namespace Schneenet\Vbin\Models;
 
-class Album extends \Illuminate\Database\Eloquent\Model
+class Paste extends \Illuminate\Database\Eloquent\Model
 {
 	protected $with = array('previous');
 	
@@ -9,11 +9,11 @@ class Album extends \Illuminate\Database\Eloquent\Model
 	
 	public function previous()
 	{
-		return $this->belongsTo("Schneenet\\Vbin\\Models\\Album", 'previous_id');
+		return $this->belongsTo("Schneenet\\Vbin\\Models\\Paste", 'previous_id');
 	}
 	
 	public function next()
 	{
-		return $this->hasOne("Schneenet\\Vbin\\Models\\Album", 'previous_id');
+		return $this->hasOne("Schneenet\\Vbin\\Models\\Paste", 'previous_id');
 	}
 }
