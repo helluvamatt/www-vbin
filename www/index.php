@@ -7,6 +7,7 @@ $app->get('/', function () use ($app) {
 })->name('/');
 
 $app->get('/:id', function($share_id) use ($app) {
+	// Handle loading from the database
 	$id = base_convert($share_id, 16, 10);
 	$pasteMode = Schneenet\Vbin\Models\Paste::find($id);
 	$data = array(
@@ -19,7 +20,7 @@ $app->get('/:id', function($share_id) use ($app) {
 })->name('/:id');
 
 $app->post('/save', function() use ($app) {
-	// TODO Handle saving from the editor
+	// Handle saving from the editor
 	$previous_id = $app->request->post('previous_id');
 	$pasteModel = Schneenet\Vbin\Models\Paste::create(array(
 		'previous_id' => $previous_id == '' ? null : $previous_id,
@@ -33,7 +34,10 @@ $app->post('/save', function() use ($app) {
 })->name('save');
 
 $app->get('/history/:id', function($id) use ($app) {
-	// TODO Do history
+	$data = array(
+		
+	);
+	$app->render("history.twig", $data);
 })->name('/history/:id');
 
 $app->get('/diff/:comparison', function($comp) use ($app) {
