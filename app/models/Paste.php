@@ -3,6 +3,9 @@ namespace Schneenet\Vbin\Models;
 
 class Paste extends \Illuminate\Database\Eloquent\Model
 {
+		
+	protected $fillable = ['previous_id', 'lang', 'title', 'data'];
+	
 	protected $with = array('previous');
 	
 	protected $dates = ['created_at', 'modified_at'];
