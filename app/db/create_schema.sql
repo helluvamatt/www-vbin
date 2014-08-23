@@ -1,4 +1,5 @@
 ﻿DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS paste_revisions;
 DROP TABLE IF EXISTS pastes;
 
 -- CodeIgniter Session table
@@ -36,10 +37,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TABLE pastes (
-	id BIGSERIAL PRIMARY KEY,
+	id CHARACTER(8) PRIMARY KEY,
+	latest_revision_id CHARACTER(8) NOT null,
+	created_at TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE paste_revisions (
+	id CHARACTER(8) PRIMARY KEY,
+	paste_id CHARACTER(8) NOT NULL REFERENCES pastes(id),
 	title CHARACTER VARYING(255) DEFAULT null,
 	lang CHARACTER VARYING(255) NOT null DEFAULT 'ace/mode/text',
 	data TEXT,
-	previous_id BIGINT DEFAULT null,
 	created_at TIMESTAMP NOT null DEFAULT CURRENT_TIMESTAMP
 );
