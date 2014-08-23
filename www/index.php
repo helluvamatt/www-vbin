@@ -9,14 +9,20 @@ $app->get('/', function () use ($app) {
 $app->get('/:id', function($share_id) use ($app) {
 	// Handle loading from the database
 	$id = base_convert($share_id, 16, 10);
-	$pasteMode = Schneenet\Vbin\Models\Paste::find($id);
-	$data = array(
-		'previous_id' => $share_id,
-		'previous_lang' => $pasteMode->lang,
-		'previous_title' => $pasteMode->title,
-		'previous_paste' => $pasteMode->data
-	);
-	$app->render("editor.twig", $data);
+	$pasteModel = Schneenet\Vbin\Models\Paste::find($id);
+	$data = array();
+	if (isset($pasteModel))
+	{
+		$data['previous_id'] = $share_id;
+		$data['previous_lang'] = $pasteModel->lang;
+		$data['previous_title'] = $pasteModel->title;
+		$data['previous_paste'] = $pasteModel->data;
+		$app->render("editor.twig", $data);
+	}
+	else
+	{
+		$app->notFound();
+	}
 })->name('/:id');
 
 $app->post('/save', function() use ($app) {
@@ -28,16 +34,26 @@ $app->post('/save', function() use ($app) {
 		'title' => $app->request->post('title'),
 		'data' => $app->request->post('paste') 
 	));
-	$share_id = str_pad(base_convert($pasteModel->id, 10, 16), 8, "0", STR_PAD_LEFT);
-	$redirectUri = $app->urlFor('/:id', array('id' => $share_id));
+	$redirectUri = $app->urlFor('/:id', array('id' => $pasteModel->shareId));
 	$app->response->redirect($redirectUri, 303);
 })->name('save');
 
-$app->get('/history/:id', function($id) use ($app) {
-	$data = array(
-		
-	);
-	$app->render("history.twig", $data);
+$app->get('/history/:id', function($share_id) use ($app) {
+	$id = base_convert($share_id, 16, 10);
+	$model = Schneenet\Vbin\Models\Paste::find($id);
+	if (isset($model))
+	{
+		$historyRecords = Schneenet\Vbin\Models\Paste::history($model);
+		$data = array(
+			'historyRecords' => $historyRecords,
+			'model' => $model
+		);
+		$app->render("history.twig", $data);
+	}
+	else
+	{
+		$app->notFound();
+	}
 })->name('/history/:id');
 
 $app->get('/diff/:comparison', function($comp) use ($app) {
