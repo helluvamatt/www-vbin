@@ -2,6 +2,7 @@
 var onLoad = function() {
 	
 	$('li a#tbSaveAction').on('click', function() {
+		window.beforeunload = null;
 		$('#editorForm').submit();
 	});
 	
@@ -42,7 +43,16 @@ var onLoad = function() {
 	editor.getSession().on('change', function(){
 		$editorField.val(editor.getSession().getValue());
 		
-		window.addEventListener('beforeunload', beforeUnloadHandler);
+		window.beforeunload = beforeUnloadHandler;
+	});
+	
+	editor.commands.addCommand({
+	    name: 'save',
+	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+	    exec: function(editor) {
+	    	$('#tbSaveAction').trigger('click');
+	    },
+	    readOnly: false
 	});
     
 	// Get the app url from the template
