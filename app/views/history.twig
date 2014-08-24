@@ -1,11 +1,12 @@
 {% extends "default.twig" %}
 {% block title %}vBin | {{ title }}{% if title is empty %}Editor{% endif %}{% endblock %}
 {% block stylesheets %}{% endblock %}
+{% block navcollapsetoggle %}{% endblock %}
 {% block navigation %}
 <!-- Navigation -->
 
 <ul class="nav navbar-nav">
-	<li><a href="{{ urlFor('/:id', {'id': model.shareId}) }}" id="tbView"><i class="fa fa-fw fa-arrow-left"></i>Back to Paste</a></li>
+	<li><a href="{{ urlFor('/p/:id/:rev', {'id': model.id}) }}" id="tbView"><i class="fa fa-fw fa-arrow-left"></i>Back to Editor</a></li>
 </ul>
 
 {% endblock %}
@@ -15,26 +16,37 @@
 	<div class="page-header">
 		<h1>Revision History</h1>
 	</div>
-{% if historyRecords %}
+{% if model.revisions %}
 	<table class="table">
 		<thead>
 			<tr>
 				<th style="width: 100px;" scope="col">ID</th>
 				<th>Title</th>
 				<th style="width: 200px;" scope="col">Created</th>
-				<th style="width: 100px;" scope="col">&nbsp;</th>
+				<th style="width: 100px;" scope="col">
+					<a id="compareBtn" data-diff-link="{{ urlFor('/diff/:id/:spec', {'id': model.id, 'spec': '%spec%'}) }}" href="#" class="btn btn-default btn-xs with-tooltip" title="Compare selected revisions"><i class="fa fa-fw fa-exchange"></i>Compare</a>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-{% for historyItem in historyRecords %}
-			<tr{% if historyItem.id == model.id %} class="info with-tooltip" title="Selected revision"{% endif %}>
-				<td><a href="{{ urlFor('/history/:id', {'id': historyItem.shareId}) }}">{{ historyItem.shareId }}</a></td>
-				<td>{{ historyItem.title }}</td>
-				<td class="with-tooltip" title="{{ historyItem.created.toDateTimeString() }}"><i class="fa fa-fw fa-clock-o"></i>{{ historyItem.created.diffForHumans() }}</td>
+{% for revision in model.revisions %}
+			<tr>
+				<td><a href="{{ urlFor('/p/:id/:rev', {'id': model.id, 'rev': revision.id}) }}">{{ revision.id }}</a></td>
+				<td>{{ revision.title }}</td>
+				<td class="with-tooltip" title="{{ revision.created.toDateTimeString() }}"><i class="fa fa-fw fa-clock-o"></i>{{ revision.created.diffForHumans() }}</td>
 				<td>
-{% if historyItem.id != model.id %}
-					<a href="#" class="btn btn-default btn-xs with-tooltip" title="Compare with selected revision"><i class="fa fa-fw fa-exchange"></i>Compare</a>
+					<div style="width: 36px; float: left;">
+{% if not loop.first %}
+						<input class="radio-revFrom" type="radio" name="revFrom" data-index="{{ loop.index0 }}" value="{{ revision.id }}" />
+{% else %}
+&nbsp;
 {% endif %}
+					</div>
+					<div style="width: 36px; float: left;">
+{% if not loop.last  %}
+						<input class="radio-revTo" type="radio" name="revTo" data-index="{{ loop.index0 }}" value="{{ revision.id }}" />
+{% endif %}
+					</div>
 				</td>
 			</tr>
 {% endfor %}
@@ -50,5 +62,5 @@
 {% endblock %}
 {% block javascripts %}
 <!-- Additional javascripts -->
-
+<script src="{{ siteUrl('/assets/js/history.js') }}"></script>
 {% endblock %}

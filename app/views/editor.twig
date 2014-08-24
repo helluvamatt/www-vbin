@@ -6,34 +6,35 @@
 {% block navigation %}
 <!-- Navigation -->
 
-<ul class="nav navbar-nav">
-	<li><a href="#" id="tbNewAction"><i class="fa fa-fw fa-file-text"></i>New</a></li>
-	<li><a href="#" id="tbSaveAction"><i class="fa fa-fw fa-share-alt"></i>Save</a></li>
-{% if previous_id is not empty %}
-	<li><a href="{{ urlFor('/history/:id', {'id': previous_id}) }}" id="tbHistoryAction"><i class="fa fa-fw fa-history"></i>Previous Versions</a></li>
+<div class="collapse navbar-collapse" id="navbarCollapse">
+	<ul class="nav navbar-nav">
+		<li><a href="#" id="tbNewAction"><i class="fa fa-fw fa-file-text"></i>New</a></li>
+		<li><a href="#" id="tbSaveAction"><i class="fa fa-fw fa-share-alt"></i>Save</a></li>
+{% if id is not empty %}
+		<li><a href="{{ urlFor('/history/:id', {'id': id}) }}" id="tbHistoryAction"><i class="fa fa-fw fa-history"></i>Previous Versions</a></li>
 {% endif %}
-	<!-- li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit <span class="caret"></span></a></li -->
-</ul>
+	</ul>
 
-<div class="navbar-form navbar-left">
-	<div class="form-group with-tooltip" title="Language Highlight Mode">
-		<label for="languageMenu" class="navbar-text"><i class="fa fa-fw fa-file-code-o"></i></label>
-		<select class="form-control" name="lang" id="languageMenu">
-			<option value="">None</option>
-		</select>
-	</div>
+	<div class="navbar-form navbar-left">
+		<div class="form-group with-tooltip" title="Language Highlight Mode">
+			<label for="languageMenu" class="navbar-text"><i class="fa fa-fw fa-file-code-o"></i></label>
+			<select class="form-control" name="lang" id="languageMenu">
+				<option value="">None</option>
+			</select>
+		</div>
+</div>
 </div>
 
 {% endblock %}
 {% block content %}
-<form id="editorForm" method="post" action="{{ urlFor('save') }}" data-previous="{{ previous_id }}" data-post-action="{{ urlFor('save') }}">
-	<input type="hidden" name="previous_id" value="{{ previous_id }}" />
-	<input type="hidden" name="lang" id="languageField" value="{{ previous_lang }}" />
+<form id="editorForm" method="post" action="{{ urlFor('save') }}" data-id="{{ id }}" data-post-action="{{ urlFor('save') }}">
+	<input type="hidden" name="id" value="{{ id }}" />
+	<input type="hidden" name="lang" id="languageField" value="{{ model.lang }}" />
 	<div id="titleFieldContainer">
-		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ previous_title }}">
+		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ model.title }}">
 	</div>
 	<div id="pasteFieldContainer">
-		<textarea id="pasteField" name="paste">{{ previous_paste }}</textarea>
+		<textarea id="pasteField" name="paste">{{ model.data }}</textarea>
 		<div id="pasteFieldEditor"></div>
 	</div>
 </form>
