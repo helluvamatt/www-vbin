@@ -45,7 +45,7 @@ body {
 .messageContainer
 {
 	position: absolute;
-	top: 5px;
+	top: 2px;
 	left: 0px;
 	right: 0px;
 	z-index: 1050;
@@ -55,6 +55,7 @@ body {
 {
 	display: inline-block;
 	width: auto;
+	padding: 2px 15px 3px;
 }
 
 table.table-fixed

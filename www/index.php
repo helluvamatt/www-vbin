@@ -60,7 +60,7 @@ $app->post('/save', function() use ($app) {
 	));
 	$revisionModel->createId();
 	$pasteModel->revisions()->save($revisionModel);
-	$app->flash('msg', array('class' => 'alert alert-success', 'text' => "Saved!"));
+	$app->flash('message', array('class' => 'alert alert-success', 'text' => "Saved!"));
 	$redirectUri = $app->urlFor('/p/:id/:rev', array('id' => $pasteModel->id));
 	$app->response->redirect($redirectUri, 303);
 })->name('save');
