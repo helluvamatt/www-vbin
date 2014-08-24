@@ -1,13 +1,6 @@
 
 var onLoad = function() {
 	
-	// Bind event handlers to toolbar actions
-	$('li a#tbNewAction').on('click', function() {
-		// TODO Check editors dirty
-		// if (dirty) prompt
-		// else navigate to new editor
-	});
-	
 	$('li a#tbSaveAction').on('click', function() {
 		$('#editorForm').submit();
 	});
@@ -24,11 +17,32 @@ var onLoad = function() {
 	// Setup editor
 	editor.setTheme("ace/theme/twilight");
 	
+	var editorDirty = false;
+	
+	// Check if the editor is dirty, and prompt the user
+	var beforeUnloadHandler = function(e) {
+		// If we haven't been passed the event get the window.event
+	    e = e || window.event;
+
+	    var message = 'You have no saved your changes to this paste.';
+
+	    // For IE6-8 and Firefox prior to version 4
+	    if (e) 
+	    {
+	        e.returnValue = message;
+	    }
+
+	    // For Chrome, Safari, IE8+ and Opera 12+
+	    return message;
+	};
+	
 	// Bind the editor to the editorField and hide the field
 	$editorField.hide();
 	editor.getSession().setValue($editorField.val());
 	editor.getSession().on('change', function(){
 		$editorField.val(editor.getSession().getValue());
+		
+		window.addEventListener('beforeunload', beforeUnloadHandler);
 	});
     
 	// Get the app url from the template
