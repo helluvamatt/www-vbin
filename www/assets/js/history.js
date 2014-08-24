@@ -15,7 +15,7 @@ var onLoad = function()
 		var selectedToRev = $('input[name="revTo"]:checked').val();
 		if (selectedFromRev != '' && selectedToRev != '')
 		{
-			var diffSpec = selectedFromRev + '+' + selectedToRev;
+			var diffSpec = selectedFromRev + '@' + selectedToRev;
 			var href = $compareBtn.data('diffLink').replace('%spec%', diffSpec);
 			$compareBtn.attr('href', href);
 		}

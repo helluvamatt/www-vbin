@@ -15,7 +15,7 @@ body {
 
 @media (min-width: 768px)
 {
-	body { padding-top: 30px; }
+	body { padding-top: 36px; }
 	.navbar-nav > li > a {padding-top:5px; padding-bottom:5px;}
 	.navbar {min-height:29px;}
 	.navbar-brand {height: 30px; padding: 5px;}

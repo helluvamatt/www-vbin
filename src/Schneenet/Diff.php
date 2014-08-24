@@ -27,6 +27,8 @@ class Diff
 	
 	public $unifiedDiff;
 	
+	public $unifiedDiffLines;
+	
 	public $listing;
 
 	public function __construct($from, $to)
@@ -35,12 +37,12 @@ class Diff
 		$this->to = $to;
 		
 		$this->unifiedDiff = xdiff_string_diff($this->from, $this->to);
+		$this->unifiedDiffLines = explode("\n", $this->unifiedDiff);
 	}
 	
-	public function parseUnifiedDiff()
+	public function processForSideBySide()
 	{
-		$diffLines = explode("\n", $this->unifiedDiff);
-		$countLines = count($diffLines);
+		$countLines = count($this->unifiedDiffLines);
 		
 		$fromLines = explode("\n", $this->from);
 		$toLines = explode("\n", $this->to);
@@ -48,8 +50,6 @@ class Diff
 		$this->listing = array();
 		
 		$leftOffset = $rightOffset = 0;
-		$leftLength = $rightLength = 0;
-		
 		$leftReadPos = $rightReadPos = 0;
 		
 		// First pass: Go over each line in the unified diff, fill the left and right lists
@@ -59,14 +59,12 @@ class Diff
 		{
 			
 			// Parse the hunk header
-			$line = $diffLines[$i];
+			$line = $this->unifiedDiffLines[$i];
 			$matches = array();
 			if (preg_match(Diff::RE_HUNK_HEADER, $line, $matches))
 			{
 				$leftOffset = $matches[1] - 1;
-				$leftLength = $matches[2];
 				$rightOffset = $matches[3] - 1;
-				$rightLength = $matches[4];
 				
 				// Populate common lines for each side up to the first offset we have for this hunk
 				while ($leftReadPos < $leftOffset && $rightReadPos < $rightOffset)

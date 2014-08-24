@@ -16,31 +16,22 @@
 <div class="container-fluid">
 
 	<ul class="nav nav-tabs" role="tablist">
-		<li><a href="{{ urlFor('/diff/:id/:spec', {'id': model.id, 'spec': spec}) }}">Unified Diff</a></li>
-		<li class="active"><a href="{{ urlFor('/compare/:id/:spec', {'id': model.id, 'spec': spec}) }}">Side-by-Side Diff</a></li>
+		<li class="active"><a href="{{ urlFor('/diff/:id/:spec', {'id': model.id, 'spec': spec}) }}">Unified Diff</a></li>
+		<li><a href="{{ urlFor('/compare/:id/:spec', {'id': model.id, 'spec': spec}) }}">Side-by-Side Diff</a></li>
 	</ul>
 
 	<table class="table table-condensed table-fixed table-noborders">
-		<thead>
-			<tr>
-				<th style="width: 50%;" scope="col">{{ fromRev }}</th>
-				<th style="width: 50%;" scope="col">{{ toRev }}</th>
-			</tr>
-		</thead>
 		<tbody>
-{% for diffEntry in diff.listing %}
-{% if diffEntry.mode == 1 %}
-{% set class %} info{% endset %}
-{% elseif diffEntry.mode == 2 %}
-{% set class %} success{% endset %}
-{% elseif diffEntry.mode == 3 %}
-{% set class %} danger{% endset %}
-{% else %}
-{% set class %}{% endset %}
-{% endif %}
+{% for diffLine in diff.unifiedDiffLines %}
+{%   if diffLine|first == '+' %}
+{%     set class %} success{% endset %}
+{%   elseif diffLine|first == '-' %}
+{%     set class %} danger{% endset %}
+{%   else %}
+{%     set class %}{% endset %}
+{%   endif %}
 			<tr class="diff-row{{ class }}">
-				<td>{{ diffEntry.leftSide }}</td>
-				<td>{{ diffEntry.rightSide }}</td>
+				<td>{{ diffLine }}</td>
 			</tr>
 {% endfor %}
 		</tbody>

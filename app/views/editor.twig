@@ -10,8 +10,8 @@
 	<ul class="nav navbar-nav">
 		<li><a href="{{ urlFor('/') }}" id="tbNewAction"><i class="fa fa-fw fa-file-text"></i>New</a></li>
 		<li><a href="#" id="tbSaveAction"><i class="fa fa-fw fa-share-alt"></i>Save</a></li>
-{% if id is not empty %}
-		<li><a href="{{ urlFor('/history/:id', {'id': id}) }}" id="tbHistoryAction"><i class="fa fa-fw fa-history"></i>Previous Versions</a></li>
+{% if model.id is not empty %}
+		<li><a href="{{ urlFor('/history/:id', {'id': model.id}) }}" id="tbHistoryAction"><i class="fa fa-fw fa-history"></i>Previous Versions</a></li>
 {% endif %}
 	</ul>
 
@@ -27,14 +27,14 @@
 
 {% endblock %}
 {% block content %}
-<form id="editorForm" method="post" action="{{ urlFor('save') }}" data-id="{{ id }}" data-post-action="{{ urlFor('save') }}">
-	<input type="hidden" name="id" value="{{ id }}" />
-	<input type="hidden" name="lang" id="languageField" value="{{ model.lang }}" />
+<form id="editorForm" method="post" action="{{ urlFor('save') }}" data-id="{{ model.id }}" data-post-action="{{ urlFor('save') }}">
+	<input type="hidden" name="id" value="{{ model.id }}" />
+	<input type="hidden" name="lang" id="languageField" value="{{ revision.lang }}" />
 	<div id="titleFieldContainer">
-		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ model.title }}">
+		<input type="text" name="title" id="titleField" placeholder="Paste Title (Optional)" value="{{ revision.title }}">
 	</div>
 	<div id="pasteFieldContainer">
-		<textarea id="pasteField" name="paste">{{ model.data }}</textarea>
+		<textarea id="pasteField" name="paste">{{ revision.data }}</textarea>
 		<div id="pasteFieldEditor"></div>
 	</div>
 </form>
