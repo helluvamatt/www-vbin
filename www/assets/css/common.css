@@ -42,6 +42,47 @@ body {
 	padding: 10px;
 }
 
+.messageContainer
+{
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	right: 0px;
+	z-index: 1050;
+}
+
+.message
+{
+	display: inline-block;
+	width: auto;
+}
+
+table.table-fixed
+{
+	table-layout: fixed;
+}
+
+table.table-noborders,
+table.table-noborders tr,
+table.table-noborders tr td 
+{
+	border: none;
+}
+
+tr.diff-row
+{
+	width: 100%;
+}
+
+tr.diff-row td
+{
+	white-space: pre;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 50%;
+	height: 32px;
+}
+
 .btn img {
 	vertical-align: bottom;
 	margin: 0px 5px;
