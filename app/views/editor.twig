@@ -8,7 +8,7 @@
 
 <div class="collapse navbar-collapse" id="navbarCollapse">
 	<ul class="nav navbar-nav">
-		<li><a href="#" id="tbNewAction"><i class="fa fa-fw fa-file-text"></i>New</a></li>
+		<li><a href="{{ urlFor('/') }}" id="tbNewAction"><i class="fa fa-fw fa-file-text"></i>New</a></li>
 		<li><a href="#" id="tbSaveAction"><i class="fa fa-fw fa-share-alt"></i>Save</a></li>
 {% if id is not empty %}
 		<li><a href="{{ urlFor('/history/:id', {'id': id}) }}" id="tbHistoryAction"><i class="fa fa-fw fa-history"></i>Previous Versions</a></li>
