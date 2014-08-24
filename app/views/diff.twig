@@ -1,0 +1,49 @@
+{% extends "default.twig" %}
+{% block title %}vBin | {{ title }}{% if title is empty %}Compare Revisions{% endif %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+{% block navcollapsetoggle %}{% endblock %}
+{% block navigation %}
+<!-- Navigation -->
+
+<ul class="nav navbar-nav">
+	<li><a href="{{ urlFor('/history/:id', {'id': model.id}) }}" id="tbView"><i class="fa fa-fw fa-arrow-left"></i>Back to Revision History</a></li>
+</ul>
+
+{% endblock %}
+{% block content %}
+<!-- Content -->
+
+<div class="container-fluid">
+
+	<table class="table table-condensed table-fixed table-noborders">
+		<thead>
+			<tr>
+				<th style="width: 50%;" scope="col">{{ fromRev }}</th>
+				<th style="width: 50%;" scope="col">{{ toRev }}</th>
+			</tr>
+		</thead>
+		<tbody>
+{% for diffEntry in diff.listing %}
+{% if diffEntry.mode == 1 %}
+{% set class %} info{% endset %}
+{% elseif diffEntry.mode == 2 %}
+{% set class %} success{% endset %}
+{% elseif diffEntry.mode == 3 %}
+{% set class %} danger{% endset %}
+{% else %}
+{% set class %}{% endset %}
+{% endif %}
+			<tr class="diff-row{{ class }}">
+				<td>{{ diffEntry.leftSide }}</td>
+				<td>{{ diffEntry.rightSide }}</td>
+			</tr>
+{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+<!-- Additional javascripts -->
+
+{% endblock %}

@@ -10,4 +10,9 @@ $(document).ready(function()
 		placement: 'auto top',
 		container: 'body'
 	});	
+	
+	window.setTimeout(function() {
+		$('#flashMessage').fadeOut();
+	}, 5000);
+	
 });
