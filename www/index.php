@@ -25,29 +25,48 @@ $app->get('/', function () use ($app) {
 	$app->render("editor.twig");
 })->name('/');
 
-$app->get('/p/:id(/:rev)', 'loadModel', function($id, $rev = null) use ($app) {
+$app->get('/p/:id(/:rev)', function($id, $rev = null) use ($app) {
 	
-	if (isset($rev) == false)
+	if ($app->request->isAjax() == false)
 	{
-		$revision = $app->view->get('model')->revisions->first();
+		$redirectUrl = $app->urlFor('/') . '#!/' . $id;
+		if (isset($rev)) $redirectUrl .= '/' . $rev;
+		$app->response->redirect($redirectUrl, 301);
+		return;
+	}
+	
+	$app->response->headers->set('Content-Type', 'application/json');
+	
+	$model = Schneenet\Vbin\Models\Paste::with(array('revisions' => function($q) {
+		$q->orderBy('created_at', 'desc');
+	}))->find($id);
+	
+	$data = "";
+	if (isset($model))
+	{
+		if (isset($rev) == false)
+		{
+			$revision = $model->revisions->first();
+		}
+		else
+		{
+			$revision = $model->revisions->find($rev);
+		}
+		if (isset($revision))
+		{
+			$data = '{"status":0,"revision":' . $revision->toJson() . ',"model":' . $model->toJson() . '}';
+		}
+		else
+		{
+			$data = '{"status":404,"error":"Paste revision not found."}';
+		}
 	}
 	else
 	{
-		$revision = $app->view->get('model')->revisions->find($rev);
+		$data = '{"status":404,"error":"Paste not found."}';
 	}
-		
-	if (isset($revision))
-	{
-		$data = array(
-			'revision' => $revision
-		);
-		$app->render("editor.twig", $data);
-	}
-	else
-	{
-		$app->notFound();
-	}
-})->name('/p/:id/:rev');
+	$app->response->setBody($data);
+})->name('load');
 
 $app->post('/save', function() use ($app) {
 	// Handle saving from the editor
@@ -73,9 +92,18 @@ $app->post('/save', function() use ($app) {
 	));
 	$revisionModel->createId();
 	$pasteModel->revisions()->save($revisionModel);
-	$app->flash('message', array('class' => 'alert alert-success', 'text' => "Saved!"));
-	$redirectUri = $app->urlFor('/p/:id/:rev', array('id' => $pasteModel->id));
-	$app->response->redirect($redirectUri, 303);
+	
+	if ($app->request->isAjax())
+	{
+		$app->response->headers->set('Content-Type', 'application/json');
+		$app->response->setBody(json_encode(array('status' => 0, 'id' => $id, 'revId' => $revisionModel->id)));
+	}
+	else
+	{
+		$app->flash('message', array('class' => 'alert alert-success', 'text' => "Saved!"));
+		$redirectUri = $app->urlFor('/p/:id/:rev', array('id' => $pasteModel->id));
+		$app->response->redirect($redirectUri, 303);
+	}
 })->name('save');
 
 $app->get('/history/:id', 'loadModel', function($id) use ($app) {

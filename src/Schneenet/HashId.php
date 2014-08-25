@@ -10,6 +10,6 @@ class HashId
 		if ($length > 8) $length = 8;
 		if ($length < 5) $length = 5;
 		$hash = \gmp_init(hash('sha512', $salt . $data), 16);
-		return \substr(\gmp_strval($hash, 62), 0, $length);
+		return \str_pad(\substr(\gmp_strval($hash, 62), 0, $length), $length, '0', STR_PAD_LEFT);
 	}
 }

@@ -6,7 +6,7 @@
 <!-- Navigation -->
 
 <ul class="nav navbar-nav">
-	<li><a href="{{ urlFor('/p/:id/:rev', {'id': model.id}) }}" id="tbView"><i class="fa fa-fw fa-arrow-left"></i>Back to Editor</a></li>
+	<li><a href="{{ urlFor('/') }}#!/{{ model.id }}" id="tbView"><i class="fa fa-fw fa-arrow-left"></i>Back to Editor</a></li>
 </ul>
 
 {% endblock %}
@@ -31,7 +31,7 @@
 		<tbody>
 {% for revision in model.revisions %}
 			<tr>
-				<td><a href="{{ urlFor('/p/:id/:rev', {'id': model.id, 'rev': revision.id}) }}">{{ revision.id }}</a></td>
+				<td><a href="{{ urlFor('/') }}#!/{{ model.id }}/{{ revision.id }}">{{ revision.id }}</a></td>
 				<td>{{ revision.title }}</td>
 				<td class="with-tooltip" title="{{ revision.created.toDateTimeString() }}"><i class="fa fa-fw fa-clock-o"></i>{{ revision.created.diffForHumans() }}</td>
 				<td>

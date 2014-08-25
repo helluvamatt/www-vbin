@@ -44,18 +44,17 @@ body {
 
 .messageContainer
 {
-	position: absolute;
-	top: 2px;
-	left: 0px;
-	right: 0px;
-	z-index: 1050;
+	float: right;
+	margin: 3px 23px 3px;
 }
 
 .message
 {
 	display: inline-block;
 	width: auto;
-	padding: 2px 15px 3px;
+	padding: 3px 15px 3px;
+	margin-bottom: 0px;
+	line-height: 1.2;
 }
 
 table.table-fixed

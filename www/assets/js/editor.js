@@ -1,13 +1,98 @@
 
 var onLoad = function() {
 	
-	$('li a#tbSaveAction').on('click', function() {
-		window.beforeunload = null;
-		$('#editorForm').submit();
+	var messageTimeout = undefined;
+	
+	// Obtain references to the form and various form fields
+	var $editorForm = $('#editorForm');
+	var $idField = $('#idField');
+	var $langField = $('#languageField');
+	var $titleField = $('#titleField');
+	var $editorField = $('#pasteField');
+	
+	var $ajaxMessage = $('#ajaxMessage');
+	var $message = $ajaxMessage.children('div');
+	
+	var hideMessage = function()
+	{
+		$ajaxMessage.fadeOut(200);
+	};
+	
+	var showMessage = function(html, alertType, timeout)
+	{
+		if (typeof alertType === 'undefined') alertType = 'info';
+		if (typeof messageTimeout !== 'undefined') window.clearTimeout(messageTimeout);
+			
+		$message.html(html);
+		$message.removeClass();
+		$message.addClass('message alert alert-' + alertType);
+		if ($ajaxMessage.is(':hidden')) $ajaxMessage.fadeIn(200);
+		
+		if (typeof timeout !== 'undefined')
+		{
+			messageTimeout = window.setTimeout(function() {
+				hideMessage();
+			}, timeout);
+		}
+	};
+	
+	$('li a#tbHistoryAction').on('click', function(e) {
+		// Pick up the ID from the form field
+		var id = $idField.val();
+		
+		// Only navigate if we have a valid ID
+		if (id != '')
+		{
+			// Create the URL...
+			var url = $(this).data('hrefTemplate').replace('%model.id%', id);
+			
+			// ...and away we go!
+			window.location.href = url;
+		}
+		
+		var e = e || window.event;
+		e.preventDefault();
 	});
 	
-	// Obtain a reference to the editor field
-	var $editorField = $('#pasteField');
+	$('li a#tbSaveAction').on('click', function(e) {
+		
+		// Show loading...
+		showMessage('<i class="fa fa-spin fa-refresh"></i>&nbsp;Loading...');
+		
+		$.ajax({
+			data: $editorForm.serialize(),
+			error: function( jqXHR, textStatus, errorThrown )
+			{
+				showMessage('<i class="fa fa-times-circle"></i>&nbsp;There was a problem communicating with the server.', 'danger', 10000);
+			},
+			success: function ( data, textStatus, jqXHR )
+			{
+				if (data.error)
+				{
+					showMessage('<i class="fa fa-times-circle"></i>&nbsp;' + data.error, 'danger', 10000);
+				}
+				else if (data.status == 0)
+				{
+					window.removeEventListener('beforeunload', beforeUnloadHandler);
+					showMessage('<i class="fa fa-check">&nbsp;Saved!</i>', 'success', 5000);
+				}
+			},
+			type: 'POST',
+			url: $editorForm.data('saveUrl')
+		});
+		
+		var e = e || window.event;
+		e.preventDefault();
+	});
+	
+	// Prevent form submit on Return/Enter
+	$editorForm.on("keyup keypress", 'input', function(e) {
+		var code = e.keyCode || e.which; 
+		if (code == 13) {
+			e.preventDefault();
+			return false;
+		}
+	});
 	
 	// Instantiate an ACE editor
 	var editor = ace.edit('pasteFieldEditor');
@@ -43,7 +128,7 @@ var onLoad = function() {
 	editor.getSession().on('change', function(){
 		$editorField.val(editor.getSession().getValue());
 		
-		window.beforeunload = beforeUnloadHandler;
+		window.addEventListener('beforeunload', beforeUnloadHandler);
 	});
 	
 	editor.commands.addCommand({
@@ -67,9 +152,8 @@ var onLoad = function() {
 		$langField.val(modeName);
 	};
 	
-	// Obtain references to the language menu and language save field
+	// Obtain a reference to the language menu
 	var $langMenu = $('#languageMenu');
-	var $langField = $('#languageField');
 	
 	// Handle changes to the language menu
 	$langMenu.on('change', function() {
@@ -95,7 +179,6 @@ var onLoad = function() {
 	};
 	
 	// Handle changes to the title field
-	var $titleField = $('#titleField');
 	var handleTitleChange = function() {
 		var val = $(this).val();
 		var modeName = getModeNameForPath(modeList.modes, val);
@@ -113,9 +196,70 @@ var onLoad = function() {
 		$langMenu.append($entry);
 	}
 	
-	// Set the menu to the saved language value if editing
-	var origLangVal = $langField.val();
-	setMode(origLangVal);
+	// load paste revision from hash URL
+	var loadFromHash = function(hash)
+	{
+		// Ensure the hash is valid
+		var hashRe = new RegExp("^\#\!\/([0-9a-zA-z]{8})(?:\/([0-9a-zA-z]{8}))?");
+		var matched = hash.match(hashRe);
+		if (matched)
+		{
+			var id = matched[1];
+			var rev = '';
+			if (matched[2]) rev = '/' + matched[2];
+			var ajaxUrl = $editorForm.data('loadUrl').replace('%id%', id).replace('/%rev%', rev);
+			
+			// Show loading...
+			showMessage('<i class="fa fa-spin fa-refresh"></i>&nbsp;Loading...');
+			
+			// Launch AJAX request
+			$.ajax({
+				error: function( jqXHR, textStatus, errorThrown )
+				{
+					showMessage('<i class="fa fa-times-circle"></i>&nbsp;There was a problem communicating with the server: ' + errorThrown, 'danger', 10000);
+				},
+				success: function ( data, textStatus, jqXHR )
+				{
+					if (data.error)
+					{
+						showMessage('<i class="fa fa-times-circle"></i>&nbsp;' + data.error, 'danger', 10000);
+					}
+					else if (data.status == 0)
+					{
+						// Populate the ID field:
+						$idField.val(data.model.id);
+						
+						// Populate the title field:
+						$titleField.val(data.revision.title);
+
+						// Populate the paste editor:
+						editor.getSession().setValue(data.revision.data);
+						window.removeEventListener('beforeunload', beforeUnloadHandler);
+						
+						// Propagate the language around the UI:
+						setMode(data.revision.lang);
+
+						// Show the history menu item:
+						$('#tbHistoryActionItem').show();
+						
+						// Clear the loading message
+						hideMessage();
+					}
+				},
+				type: 'GET',
+				url: ajaxUrl
+			});
+		}
+	}
+	
+	// Bind hash listener
+	$(window).on('hashchange', function() {
+		if (window.location.hash != '')
+			loadFromHash(window.location.hash);
+	});
+	
+	// Initial hash load on page load
+	$(window).trigger('hashchange');
 	
 };
 $(onLoad);
