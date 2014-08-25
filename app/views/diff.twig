@@ -39,8 +39,8 @@
 {% set class %}{% endset %}
 {% endif %}
 			<tr class="diff-row{{ class }}">
-				<td>{{ diffEntry.leftSide }}</td>
-				<td>{{ diffEntry.rightSide }}</td>
+				<td class="diff-cell">{{ diffEntry.leftSide }}</td>
+				<td class="diff-cell">{{ diffEntry.rightSide }}</td>
 			</tr>
 {% endfor %}
 		</tbody>

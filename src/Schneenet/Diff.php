@@ -126,6 +126,14 @@ class Diff
 				
 			$i++;
 		}
+		
+		// Continue adding common lines after the last hunk
+		while ($leftReadPos < count($fromLines) && $rightReadPos < count($toLines))
+		{
+			$this->listing[] = new Diff\DiffedLine(Diff\DiffedLine::MODE_CONTEXT, $fromLines[$leftReadPos], $toLines[$rightReadPos]);
+			$rightReadPos++;
+			$leftReadPos++;
+		}
 	}
 }
 

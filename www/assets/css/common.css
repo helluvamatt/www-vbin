@@ -74,13 +74,15 @@ tr.diff-row
 	width: 100%;
 }
 
-tr.diff-row td
+tr.diff-row td.diff-cell
 {
 	white-space: pre;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	width: 50%;
-	height: 32px;
+	/*height: 32px;*/
+	font-size: 12px;
+	padding: 1px;
 }
 
 .btn img {
