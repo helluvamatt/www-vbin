@@ -20,8 +20,6 @@
 		"twig/twig" : "1.*",
 		"slim/views" : "0.1.*",
 		"illuminate/database" : "4.2.*",
-		"schneenet/www-php-common": "dev-master",
-		"ext-xdiff": "*",
-		"ext-mcrypt": "*"
+		"schneenet/www-php-common": "dev-master"
 	}
 }

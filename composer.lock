@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9b335a831e81ac71f0a4f027fee7aa93",
+    "hash": "4b61128fbb3a6d5a834ed5fd7124f583",
     "packages": [
         {
             "name": "illuminate/container",
@@ -248,12 +248,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/helluvamatt/www-php-common.git",
-                "reference": "852429c9cbf4a12a93d1ad5e64dfcc0b51edf2ee"
+                "reference": "5db9f603e13a7b5a446b075e7172866976eca80b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/helluvamatt/www-php-common/zipball/852429c9cbf4a12a93d1ad5e64dfcc0b51edf2ee",
-                "reference": "852429c9cbf4a12a93d1ad5e64dfcc0b51edf2ee",
+                "url": "https://api.github.com/repos/helluvamatt/www-php-common/zipball/5db9f603e13a7b5a446b075e7172866976eca80b",
+                "reference": "5db9f603e13a7b5a446b075e7172866976eca80b",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +280,7 @@
                 "source": "https://github.com/helluvamatt/www-php-common/tree/master",
                 "issues": "https://github.com/helluvamatt/www-php-common/issues"
             },
-            "time": "2014-08-08 01:52:38"
+            "time": "2014-08-28 21:11:09"
         },
         {
             "name": "slim/slim",
@@ -452,9 +452,7 @@
     },
     "prefer-stable": false,
     "platform": {
-        "php": ">=5.5",
-        "ext-xdiff": "*",
-        "ext-mcrypt": "*"
+        "php": ">=5.5"
     },
     "platform-dev": [
 
